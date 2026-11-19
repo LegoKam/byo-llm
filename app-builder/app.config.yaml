@@ -1,0 +1,22 @@
+application:
+  actions: actions
+  runtimeManifest:
+    packages:
+      byo-llm:
+        license: Apache-2.0
+        actions:
+          generate:
+            function: actions/generate/index.js
+            web: 'yes'
+            runtime: nodejs:22
+            limits:
+              timeout: 60000
+            inputs:
+              # Comma-separated DA organisations (or org/site pairs) this proxy serves. Required.
+              BYO_LLM_ALLOWED_ORGS: $BYO_LLM_ALLOWED_ORGS
+            annotations:
+              # The action authenticates callers itself: it reads the site's settings from DA
+              # with the caller's Experience Workspace token.
+              require-adobe-auth: false
+              # Request parameters cannot override the inputs above.
+              final: true
