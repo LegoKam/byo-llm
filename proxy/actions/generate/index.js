@@ -17,14 +17,14 @@
 
 import { lookup as dnsLookup } from 'node:dns/promises';
 import { isIP } from 'node:net';
-import { findConnection } from '../../../tools/byo-llm/lib/config-model.js';
-import { buildRequest, callLlm, LlmError } from '../../../tools/byo-llm/lib/providers.js';
+import { findConnection } from '../../../plugin/tools/byo-llm/lib/config-model.js';
+import { buildRequest, callLlm, LlmError } from '../../../plugin/tools/byo-llm/lib/providers.js';
 import {
   DEFAULT_ORIGINS, StoreError, createAuthedFetch, createStore,
-} from '../../../tools/byo-llm/lib/store.js';
+} from '../../../plugin/tools/byo-llm/lib/store.js';
 import {
   errorResponse, getBearerToken, isAllowed, jsonResponse, parseAllowList,
-} from '../utils.js';
+} from '../../lib/utils.js';
 
 // The action itself is limited to 60 s (app.config.yaml); stop a little earlier to answer cleanly.
 const LLM_TIMEOUT = 55000;

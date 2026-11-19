@@ -1,14 +1,14 @@
-# Only /tools is served to Experience Workspace. Keep everything else off the CDN.
+# Only /plugin/tools is served to Experience Workspace. Keep everything else off the CDN.
 .*
 *.md
 LICENSE
 Brief
 DOCS/
-app-builder/
+proxy/
+plugin/test/
 dev/
 guides/
 marketplace/
 node_modules/
-test/
 package.json
 package-lock.json

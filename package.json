@@ -7,7 +7,9 @@
   "type": "module",
   "scripts": {
     "dev": "node dev/server.mjs",
-    "test": "node --test test/*.test.js"
+    "test": "npm run test:plugin && npm run test:proxy",
+    "test:plugin": "node --test \"plugin/test/*.test.js\"",
+    "test:proxy": "npm --prefix proxy test"
   },
   "devDependencies": {
     "jsdom": "^25.0.1"

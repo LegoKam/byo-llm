@@ -4,7 +4,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
 async function filesUnder(dir) {
   const entries = await readdir(path.join(ROOT, dir), { withFileTypes: true, recursive: true });
@@ -19,7 +19,7 @@ async function filesUnder(dir) {
  * links in text are fine.)
  */
 test('the shipped plugin loads nothing from another origin', async () => {
-  const files = await filesUnder('tools');
+  const files = await filesUnder('plugin/tools');
   assert.ok(files.length > 10);
 
   for (const file of files) {
@@ -46,13 +46,13 @@ test('the shipped plugin loads nothing from another origin', async () => {
 test('the project has no runtime dependencies', async () => {
   const pkg = JSON.parse(await readFile(path.join(ROOT, 'package.json'), 'utf8'));
   assert.equal(pkg.dependencies, undefined);
-  const action = JSON.parse(await readFile(path.join(ROOT, 'app-builder/package.json'), 'utf8'));
+  const action = JSON.parse(await readFile(path.join(ROOT, 'proxy/package.json'), 'utf8'));
   assert.equal(action.dependencies, undefined);
 });
 
 test('development and proxy code stay off the CDN', async () => {
   const ignored = (await readFile(path.join(ROOT, '.hlxignore'), 'utf8')).split('\n').map((line) => line.trim());
-  for (const entry of ['app-builder/', 'dev/', 'test/', 'guides/']) assert.ok(ignored.includes(entry), entry);
+  for (const entry of ['proxy/', 'dev/', 'plugin/test/', 'guides/']) assert.ok(ignored.includes(entry), entry);
 });
 
 test('the marketplace entry points at this plugin', async () => {

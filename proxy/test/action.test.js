@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import {
   assertPublicEndpoint, createMain, isPrivateAddress, readRequest,
-} from '../app-builder/actions/generate/index.js';
-import { getBearerToken, isAllowed, parseAllowList } from '../app-builder/actions/utils.js';
-import { normalizeConnection, toSheet } from '../tools/byo-llm/lib/config-model.js';
+} from '../actions/generate/index.js';
+import { getBearerToken, isAllowed, parseAllowList } from '../lib/utils.js';
+import { normalizeConnection, toSheet } from '../../plugin/tools/byo-llm/lib/config-model.js';
 
 const TOKEN = 'ims-token';
 const KEY = 'sk-secret-1234';
@@ -212,7 +212,7 @@ test('action helpers', () => {
 });
 
 test('the deployed action cannot be reconfigured by a request', async () => {
-  const manifest = await readFile(new URL('../app-builder/app.config.yaml', import.meta.url), 'utf8');
+  const manifest = await readFile(new URL('../app.config.yaml', import.meta.url), 'utf8');
   assert.match(manifest, /^\s+final: true$/m);
   assert.match(manifest, /^\s+BYO_LLM_ALLOWED_ORGS: \$BYO_LLM_ALLOWED_ORGS$/m);
   assert.match(manifest, /^\s+web: 'yes'$/m);

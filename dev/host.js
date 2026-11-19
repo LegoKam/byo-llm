@@ -206,15 +206,15 @@ function serve(frame, context, { hasEditor }) {
 
 const plugin = $('plugin');
 const appFrame = $('app-frame');
-const PLUGIN_URL = '/tools/byo-llm/byo-llm.html?mock-da';
+const PLUGIN_URL = '/plugin/tools/byo-llm/byo-llm.html?mock-da';
 // The real shell forwards its own query and fragment to the app, so the site travels in `#/org/site`.
-const APP_URL = `/tools/byo-llm/config.html?mock-da#/${org}/${SITE}`;
+const APP_URL = `/plugin/tools/byo-llm/config.html?mock-da#/${org}/${SITE}`;
 
 serve(plugin, {
   org, repo: SITE, site: SITE, ref: 'main', path: '/drafts/larapinta-trail', view: 'edit',
 }, { hasEditor: true });
 // A fullscreen app gets the repository its code is served from, which is not the site to configure.
-serve(appFrame, { org: 'plugin-owner', repo: 'ew-byo-llm', ref: 'main', path: 'tools/byo-llm/config' }, { hasEditor: false });
+serve(appFrame, { org: 'plugin-owner', repo: 'ew-byo-llm', ref: 'main', path: 'plugin/tools/byo-llm/config' }, { hasEditor: false });
 plugin.src = PLUGIN_URL;
 
 /* ---------- Toolbar ---------- */

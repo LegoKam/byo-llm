@@ -3,7 +3,7 @@
  * runs offline and without real credentials:
  *
  *   /dev/host.html            a stand-in for the Experience Workspace editor (the SDK host)
- *   /tools/...                the plugin, served as the AEM CDN would
+ *   /plugin/tools/...         the plugin, served as the AEM CDN would
  *   /mock/da/...              DA admin: the settings sheet (kept in dev/.state/)
  *   /mock/openai/...          OpenAI chat completions
  *   /mock/anthropic/...       Anthropic messages
@@ -17,7 +17,7 @@ import http from 'node:http';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createMain } from '../app-builder/actions/generate/index.js';
+import { createMain } from '../proxy/actions/generate/index.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const STATE_FILE = path.join(ROOT, 'dev', '.state', 'da.json');
@@ -382,7 +382,7 @@ async function handleStatic(req, res, url) {
   }
   const pathname = decodeURIComponent(url.pathname);
   const file = path.join(ROOT, path.normalize(pathname));
-  const servable = ['tools', 'dev'].some((dir) => file.startsWith(path.join(ROOT, dir) + path.sep));
+  const servable = [path.join('plugin', 'tools'), 'dev'].some((dir) => file.startsWith(path.join(ROOT, dir) + path.sep));
   if (!servable || file.includes(`${path.sep}.`)) {
     send(res, 404, 'Not found');
     return;

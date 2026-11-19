@@ -9,7 +9,7 @@ Authors select content in the editor, pick a quick action or describe what they 
 optionally attach files for context, check the result and put it into the page. A site
 admin connects the models and sets brand guidelines once per site.
 
-![The BYO LLM panel next to a document, with a shortened paragraph ready to replace the selection](guides/img/panel.png)
+![The BYO LLM panel next to a document, with a shortened paragraph ready to replace the selection](guides/images/panel.png)
 
 *The panel in the local development host (`npm run dev`), with a mock model.*
 
@@ -49,11 +49,11 @@ nothing from other hosts: no framework, no CDN script, no hosted SDK.
 2. Install [AEM Code Sync](https://github.com/apps/aem-code-sync/installations/new) on
    that repository.
 3. Check that
-   `https://main--{repo}--{owner}.aem.live/tools/byo-llm/byo-llm.html` loads. Opened
+   `https://main--{repo}--{owner}.aem.live/plugin/tools/byo-llm/byo-llm.html` loads. Opened
    directly it says "Connecting to Experience Workspace…" and, after a few seconds, that
    it has to be opened from the editor. That is expected.
 
-Only `tools/` is served. `.hlxignore` keeps everything else off the CDN.
+Only `plugin/tools/` is served. `.hlxignore` keeps everything else off the CDN.
 
 ### 2. Add the plugin to a site
 
@@ -62,7 +62,7 @@ Only `tools/` is served. `.hlxignore` keeps everything else off the CDN.
 
    | title | path | icon |
    |---|---|---|
-   | BYO LLM | `https://main--{repo}--{owner}.aem.live/tools/byo-llm/byo-llm.html` | `https://main--{repo}--{owner}.aem.live/tools/byo-llm/icon.svg` |
+   | BYO LLM | `https://main--{repo}--{owner}.aem.live/plugin/tools/byo-llm/byo-llm.html` | `https://main--{repo}--{owner}.aem.live/plugin/tools/byo-llm/icon.svg` |
 
    Leave `ref`, `experience` and `format` empty. The plugin opens as a side panel.
 3. Save the configuration.
@@ -82,7 +82,7 @@ Only `tools/` is served. `.hlxignore` keeps everything else off the CDN.
 The settings are written to the sheet `/{org}/{site}/.da/byo-llm`. See
 [Where the credentials are stored](#where-the-credentials-are-stored).
 
-![The settings: three LLM connections, one marked as default, and the brand guidelines](guides/img/settings.png)
+![The settings: three LLM connections, one marked as default, and the brand guidelines](guides/images/settings.png)
 
 ### 4. Optional: the settings app
 
@@ -90,7 +90,7 @@ The same settings UI is available as a fullscreen app, for admins who prefer not
 a page first:
 
 ```
-https://da.live/app/{owner}/{repo}/tools/byo-llm/config#/{org}/{site}
+https://da.live/app/{owner}/{repo}/plugin/tools/byo-llm/config#/{org}/{site}
 ```
 
 `{owner}/{repo}` is the GitHub repository of the plugin. `#/{org}/{site}` is the site to
@@ -190,7 +190,7 @@ they were already in the selection.
 
 ## Optional: the proxy
 
-`app-builder/` contains an [Adobe App Builder](https://developer.adobe.com/app-builder/)
+`proxy/` contains an [Adobe App Builder](https://developer.adobe.com/app-builder/)
 web action that calls the LLM instead of the browser. Use it when the endpoint does not
 accept browser requests or only accepts allow-listed addresses.
 
@@ -205,7 +205,7 @@ does not hide the API key from them.
 Deploy:
 
 ```sh
-cd app-builder
+cd proxy
 aio login
 aio app use            # choose your App Builder project and workspace; writes .env
 echo 'BYO_LLM_ALLOWED_ORGS=my-da-org' >> .env
@@ -268,7 +268,7 @@ Not yet tested, because it needs your accounts:
 
 ```sh
 npm install
-npm test
+npm test          # plugin and proxy tests (npm run test:plugin, npm run test:proxy)
 npm run dev
 ```
 
@@ -289,23 +289,20 @@ machine and no real key is needed.
   mocks.
 
 To try your local copy in the real editor, add a library row with path
-`/tools/byo-llm/byo-llm.html` and ref `local`, run `npm run dev`, and open the editor with
+`/plugin/tools/byo-llm/byo-llm.html` and ref `local`, run `npm run dev`, and open the editor with
 `?ref=local`. Experience Workspace loads paths that start with `/` from
 `http://localhost:3000` for `local` rows.
 
 Layout:
 
-```
-tools/byo-llm/          the plugin (this is all that is served)
-  byo-llm.html, .js     the panel
-  config.html, .js      the fullscreen settings app
-  lib/                  SDK client, settings store, providers, prompt, sanitizer, views
-app-builder/            the optional proxy action
-dev/                    local host and mock services
-guides/                 the author guide and the screenshots
-test/                   unit tests
-marketplace/row.json    values for a marketplace listing
-```
+| Path | Contents |
+|---|---|
+| `plugin/tools/byo-llm/` | The plugin: the panel (`byo-llm.html`), the fullscreen settings app (`config.html`) and `lib/`. Plain ES modules, no build step. This is all that is served. |
+| `plugin/test/` | Unit tests of the plugin. |
+| `proxy/` | The optional App Builder app: the `byo-llm/generate` action, its helpers in `lib/` and its tests. It shares the provider and settings code in `plugin/tools/byo-llm/lib/`. |
+| `dev/` | Local Experience Workspace host and mock DA, OpenAI, Anthropic and Gemini. |
+| `guides/` | The author guide and the screenshots. |
+| `marketplace/row.json` | Values for a marketplace listing. |
 
 ## Marketplace
 
@@ -319,7 +316,7 @@ needs the library row above.
 
 The plugin brings the ideas of an earlier set of App Builder extensions for AEM (a BYO
 LLM configuration UI with brand guidelines, and actions that proxy requests to OpenAI) to
-Experience Workspace, as one self-contained project. `tools/byo-llm/lib/da-sdk.js` is an
+Experience Workspace, as one self-contained project. `plugin/tools/byo-llm/lib/da-sdk.js` is an
 independent implementation of the Experience Workspace App SDK protocol, written after
 Adobe's hosted SDK ([adobe/da-nx](https://github.com/adobe/da-nx), Apache-2.0).
 
