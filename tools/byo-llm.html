@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Bring your own LLM</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/tools/byo-llm/byo-llm.css">
+    <!-- Import DA App SDK -->
+    <script src="https://da.live/nx/utils/sdk.js" type="module"></script>
+    <!-- Project App Logic -->
+    <script src="/tools/byo-llm/byo-llm.js" type="module"></script>
+  </head>
+  <body>
+    <main class="byo-llm">
+      <h1>Hello, World!</h1>
+      <p class="status" id="status" role="status">Waiting for Experience Workspace…</p>
+
+      <label for="greeting">Greeting</label>
+      <input id="greeting" type="text" value="Hello, World!" autocomplete="off">
+
+      <div class="actions">
+        <button type="button" id="send-text" disabled>Insert text</button>
+        <button type="button" id="send-html" disabled>Insert as heading</button>
+        <button type="button" id="send-close" class="primary" disabled>Insert &amp; close</button>
+      </div>
+    </main>
+  </body>
+</html>
